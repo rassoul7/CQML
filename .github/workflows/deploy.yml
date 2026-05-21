@@ -1,0 +1,35 @@
+name: Déploiement du site Web
+
+# Le workflow se lance quand on "push" sur la branche principale
+on:
+  push:
+    branches: ["main"]
+
+# Donne les droits à GitHub Actions pour publier la page
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 1. Récupération du code
+        uses: actions/checkout@v4
+        
+      - name: 2. Préparation pour GitHub Pages
+        uses: actions/configure-pages@v4
+        
+      - name: 3. Création du paquet (Artefact)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+          
+      - name: 4. Déploiement en ligne ! 🚀
+        id: deployment
+        uses: actions/deploy-pages@v4
