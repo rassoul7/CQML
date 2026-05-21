@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.groupe2</groupId>
+    <artifactId>demo-github-actions</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>Demo GitHub Actions — Groupe 2</name>
+    <description>Pipeline CI/CD : GitHub Actions + PMD + SonarQube</description>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- SonarCloud -->
+        <sonar.organization>REMPLACER_PAR_VOTRE_ORG</sonar.organization>
+        <sonar.projectKey>REMPLACER_PAR_VOTRE_PROJECT_KEY</sonar.projectKey>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    </properties>
+
+    <dependencies>
+        <!-- JUnit 5 pour les tests -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Maven Compiler -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.12.1</version>
+            </plugin>
+
+            <!-- Maven Surefire (tests) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+
+            <!-- ════════════════════════════════
+                 PMD — Analyse statique du code
+                 Groupe 1 🤝 Groupe 2
+                 ════════════════════════════════ -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.21.2</version>
+                <configuration>
+                    <rulesets>
+                        <!-- Règles PMD actives -->
+                        <ruleset>/category/java/bestpractices.xml</ruleset>
+                        <ruleset>/category/java/errorprone.xml</ruleset>
+                        <ruleset>/category/java/codestyle.xml</ruleset>
+                    </rulesets>
+                    <!-- ⚡ FAIL le build si violations détectées -->
+                    <failOnViolation>true</failOnViolation>
+                    <printFailingErrors>true</printFailingErrors>
+                    <linkXRef>false</linkXRef>
+                    <targetJdk>17</targetJdk>
+                    <!-- Seuil : 0 violation tolérée -->
+                    <maxAllowedViolations>0</maxAllowedViolations>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- ════════════════════════════════
+                 SonarQube — Qualité & sécurité
+                 Groupe 4 🤝 Groupe 2
+                 ════════════════════════════════ -->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.11.0.3922</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
