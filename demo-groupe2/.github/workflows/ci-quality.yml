@@ -1,4 +1,4 @@
-name: "🚀 Pipeline Qualité — Groupe 2 (GHA + PMD + SonarQube)"
+name: "Pipeline Qualité — Groupe 2 (GHA + PMD + SonarQube)"
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 jobs:
 
   # ────────────────────────────────────────────
-  # JOB 1 — ANALYSE STATIQUE PMD (Groupe 1 🤝)
+  # JOB 1 — ANALYSE STATIQUE PMD
   # ────────────────────────────────────────────
   analyse-pmd:
     name: "🔍 Analyse PMD (Groupe 1)"
@@ -39,7 +39,7 @@ jobs:
           path: target/pmd.xml
 
   # ────────────────────────────────────────────
-  # JOB 2 — SCAN SONARQUBE (Groupe 4 🤝)
+  # JOB 2 — SCAN SONARQUBE
   # ────────────────────────────────────────────
   scan-sonarqube:
     name: "📊 Scan SonarQube (Groupe 4)"
@@ -59,7 +59,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: "🏗️ Build du projet"
+      - name: "Build du projet"
         run: mvn clean package -DskipTests --no-transfer-progress
 
       - name: "📊 Scan SonarCloud + Quality Gate"
@@ -79,7 +79,7 @@ jobs:
   # JOB 3 — DÉPLOIEMENT CD (seulement si tout ✅)
   # ────────────────────────────────────────────
   deploiement:
-    name: "🚀 Déploiement CD"
+    name: "Déploiement CD"
     runs-on: ubuntu-latest
     needs: [ analyse-pmd, scan-sonarqube ]   # ← Les DEUX doivent passer
 
@@ -87,16 +87,16 @@ jobs:
       - name: "📥 Checkout du code"
         uses: actions/checkout@v4
 
-      - name: "🎉 Déploiement simulé"
+      - name: "Déploiement simulé"
         run: |
           echo "════════════════════════════════════════"
-          echo "✅ PMD     : AUCUNE VIOLATION DÉTECTÉE"
-          echo "✅ SONAR   : QUALITY GATE PASSED"
-          echo "🚀 DÉPLOIEMENT EN PRODUCTION..."
+          echo "PMD     : AUCUNE VIOLATION DÉTECTÉE"
+          echo "SONAR   : QUALITY GATE PASSED"
+          echo "DÉPLOIEMENT EN PRODUCTION..."
           echo "════════════════════════════════════════"
           echo "Version : $(date +'%Y%m%d-%H%M%S')"
           echo "Branch  : ${{ github.ref_name }}"
           echo "Commit  : ${{ github.sha }}"
           echo "────────────────────────────────────────"
-          echo "✅ APPLICATION DÉPLOYÉE AVEC SUCCÈS !"
+          echo "APPLICATION DÉPLOYÉE AVEC SUCCÈS !"
           echo "════════════════════════════════════════"

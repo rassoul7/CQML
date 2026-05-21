@@ -84,6 +84,6 @@ public class GoodCode {
         } else {
             niveau = "Très Bien";
         }
-        return niveau;  // ✅ seul return
+        return niveau;  //
     }
 }
