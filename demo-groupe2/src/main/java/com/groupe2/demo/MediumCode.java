@@ -25,7 +25,7 @@ public class MediumCode {
     }
 
     /**
-     * Recherche un étudiant par son nom.
+     * Recherche un étudiant par son nom  """.
      * SONAR S2077 : injection SQL — le paramètre est concaténé directement
      */
     public String chercherEtudiant(String nom) throws Exception {
