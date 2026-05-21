@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<ruleset name="Règles Groupe 2 — DIC2 Qualité"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0
+         https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+    <description>
+        Règles de qualité personnalisées — Groupe 2, DIC2 SSI, ESP UCAD.
+        100% écrites en XPath par l'équipe.
+    </description>
+
+    <!-- ═══════════════════════════════════════════
+         RÈGLE 1 — Méthode trop longue (> 15 lignes)
+         ═══════════════════════════════════════════ -->
+    <rule name="MethodeTropLongue"
+          language="java"
+          message="[Groupe 2] Méthode trop longue — maximum 15 instructions (règle G2-001)"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            Une méthode ne doit pas dépasser 15 instructions.
+            Au-delà, elle doit être découpée en sous-méthodes.
+        </description>
+        <priority>2</priority>
+        <properties>
+            <property name="xpath">
+                <value><![CDATA[
+                    //MethodDeclaration[count(Block/BlockStatement) > 15]
+                ]]></value>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- ═══════════════════════════════════════════
+         RÈGLE 2 — Trop de paramètres (> 3)
+         ═══════════════════════════════════════════ -->
+    <rule name="TropDeParametres"
+          language="java"
+          message="[Groupe 2] Méthode avec trop de paramètres — maximum 3 (règle G2-002)"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            Une méthode avec plus de 3 paramètres est difficile à tester
+            et à maintenir. Regrouper les paramètres dans un objet.
+        </description>
+        <priority>2</priority>
+        <properties>
+            <property name="xpath">
+                <value><![CDATA[
+                    //MethodDeclaration/MethodDeclarator/FormalParameters
+                        [count(FormalParameter) > 3]
+                ]]></value>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- ═══════════════════════════════════════════
+         RÈGLE 3 — Nom de variable trop court (< 3 caractères)
+         ═══════════════════════════════════════════ -->
+    <rule name="NomVariableTropCourt"
+          language="java"
+          message="[Groupe 2] Nom de variable trop court — minimum 3 caractères (règle G2-003)"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            Les variables à un ou deux caractères (i, x, ab...) nuisent
+            à la lisibilité. Utiliser des noms explicites.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="xpath">
+                <value><![CDATA[
+                    //LocalVariableDeclaration/VariableDeclarator/VariableDeclaratorId
+                        [string-length(@Image) < 3]
+                ]]></value>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- ═══════════════════════════════════════════
+         RÈGLE 4 — System.out interdit en production
+         ═══════════════════════════════════════════ -->
+    <rule name="SystemOutInterdit"
+          language="java"
+          message="[Groupe 2] System.out interdit — utiliser un Logger (règle G2-004)"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            System.out.println pollue les logs en production.
+            Utiliser java.util.logging.Logger ou SLF4J.
+        </description>
+        <priority>1</priority>
+        <properties>
+            <property name="xpath">
+                <value><![CDATA[
+                    //Name[starts-with(@Image, 'System.out')]
+                ]]></value>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- ═══════════════════════════════════════════
+         RÈGLE 5 — Catch vide interdit
+         ═══════════════════════════════════════════ -->
+    <rule name="CatchVideInterdit"
+          language="java"
+          message="[Groupe 2] Bloc catch vide — les exceptions doivent être gérées (règle G2-005)"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            Un catch vide avale silencieusement les erreurs.
+            Au minimum logger l'exception.
+        </description>
+        <priority>1</priority>
+        <properties>
+            <property name="xpath">
+                <value><![CDATA[
+                    //CatchStatement/Block[count(BlockStatement) = 0]
+                ]]></value>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- ═══════════════════════════════════════════
+         RÈGLE 6 — Retours multiples interdits
+         ═══════════════════════════════════════════ -->
+    <rule name="RetourMultipleInterdit"
+          language="java"
+          message="[Groupe 2] Plusieurs return dans une méthode — un seul point de sortie (règle G2-006)"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            Une méthode doit avoir un seul point de sortie (return).
+            Facilite la lecture et le débogage.
+        </description>
+        <priority>2</priority>
+        <properties>
+            <property name="xpath">
+                <value><![CDATA[
+                    //MethodDeclaration[count(.//ReturnStatement) > 1]
+                ]]></value>
+            </property>
+        </properties>
+    </rule>
+
+</ruleset>
