@@ -2,13 +2,266 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Démo Groupe 2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Démonstration Groupe 2 - CI/CD</title>
     <style>
-        body { font-family: sans-serif; text-align: center; margin-top: 50px; }
-        h1 { color: #2c3e50; }
+        /* --- STYLES DE BASE (Thème Sombre Tech) --- */
+        :root {
+            --bg-color: #020617; /* Fond très sombre */
+            --card-bg: #0f172a; /* Fond des cartes, légèrement plus clair */
+            --text-color: #f1f5f9; /* Texte blanc cassé */
+            --accent-blue: #38bdf8; /* Bleu vif pour les accents */
+            --border-color: #1e293b; /* Couleur des bordures */
+            --footer-bg: #0a0f1e; /* Fond du footer */
+            --glow: 0 0 15px rgba(56, 189, 248, 0.5); /* Effet brillant */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER & BARRE DE NAVIGATION --- */
+        header {
+            width: 100%;
+            padding: 1rem 2rem;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-blue);
+            text-shadow: var(--glow);
+        }
+
+        .presentation-title {
+            font-size: 1rem;
+            color: #94a3b8;
+        }
+
+        /* --- CONTENU PRINCIPAL --- */
+        main {
+            margin-top: 80px; /* Espace pour le header fixe */
+            width: 90%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 0;
+            flex-grow: 1;
+        }
+
+        /* --- HERO SECTION (Zone Titre & Démo) --- */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--card-bg) 0%, #16213e 100%);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            width: 100%;
+        }
+
+        .main-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #fff, var(--accent-blue), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: textShine 4s ease-in-out infinite;
+        }
+
+        @keyframes textShine {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1rem;
+        }
+
+        .tech-info {
+            font-size: 0.9rem;
+            color: var(--accent-blue);
+            border: 1px solid var(--accent-blue);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            text-shadow: var(--glow);
+        }
+
+        /* --- CARTES D'INFORMATION (CI/CD Section) --- */
+        .cicd-section {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-blue);
+        }
+
+        .card h2 {
+            font-size: 1.4rem;
+            color: #fff;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card h2 span {
+            color: var(--accent-blue);
+        }
+
+        .card p {
+            color: #94a3b8;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* --- STATUT DU DÉPLOIEMENT --- */
+        .status-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .status-text {
+            font-size: 1.1rem;
+            margin-right: 1rem;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            color: #10b981; /* Vert émeraude */
+            font-weight: bold;
+        }
+
+        .dot {
+            height: 12px;
+            width: 12px;
+            background-color: #10b981;
+            border-radius: 50%;
+            margin-right: 8px;
+            display: inline-block;
+            box-shadow: 0 0 10px #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            width: 100%;
+            padding: 1.5rem;
+            background-color: var(--footer-bg);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        /* --- RESPONSIVITÉ POUR MOBILE --- */
+        @media (max-width: 600px) {
+            .main-title { font-size: 1.8rem; }
+            .hero { padding: 1.5rem; }
+            header { padding: 0.7rem; }
+            .presentation-title { display: none; } /* Cache le titre sur mobile pour le logo */
+        }
     </style>
 </head>
 <body>
-    <h1>Bienvenue à la présentation du Grope 2 ! 🚀</h1> <p>GitHub Actions s'occupe de tout.</p>
+
+    <header>
+        <div class="logo">DIC2 CQ</div>
+        <div class="presentation-title">Présentation Outils : GitHub Actions</div>
+    </header>
+
+    <main class="container">
+        
+        <section class="hero-section hero">
+            <h1 class="main-title">Bienvenue à la présentation du Grope 2 ! 🚀</h1>
+            <p class="subtitle">Contrôle Qualité Logiciel - SEMESTRE 2</p>
+            <div class="tech-info">Sujet #2 : GitHub Actions (CI/CD Automatisé)</div>
+        </section>
+
+        <section class="status-container">
+            <p class="status-text">Statut actuel :</p>
+            <div class="status-indicator">
+                <span class="dot"></span> Déployé avec succès
+            </div>
+        </section>
+
+        <section class="cicd-section">
+            
+            <div class="card">
+                <h2>1. Intégration Continue (CI)</h2>
+                <p>Automatisation de la validation du code à chaque modification. Cela inclut l'exécution des tests unitaires et la vérification de la qualité du code pour détecter les erreurs au plus tôt.</p>
+            </div>
+
+            <div class="card">
+                <h2>2. Déploiement Continu (CD)</h2>
+                <p>Après validation, le code est automatiquement poussé vers l'environnement de production. Cette page est un exemple concret de CD : un "git push" déclenche le workflow qui met le site en ligne.</p>
+            </div>
+
+            <div class="card">
+                <h2>3. GitHub Actions (L'Outil)</h2>
+                <p>Moteur d'automatisation puissant de GitHub. Il utilise des fichiers YAML pour définir des "Workflows" qui réagissent aux événements de votre dépôt (comme un "push" ou une "pull request").</p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 - Présentation Contrôle Qualité DIC2</p>
+    </footer>
+
 </body>
 </html>
