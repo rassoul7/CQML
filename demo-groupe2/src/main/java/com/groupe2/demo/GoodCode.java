@@ -35,21 +35,23 @@ public class GoodCode {
      * @param notes liste d'entiers représentant les notes
      * @return la moyenne ou 0.0 si la liste est vide
      */
-    public double calculerMoyenne(List<Integer> notes) {
+
+    public double calculerMoyenne(final List<Integer> notes) {
+        final double resultat;
         if (notes == null || notes.isEmpty()) {
-            LOGGER.warning("Liste de notes vide ou nulle.");
-            return 0.0;
+            LOGGER.warning("Liste vide.");
+            resultat = 0.0;
+        } else {
+            double somme = 0.0;
+            for (final int note : notes) {
+                somme += note;
+            }
+            resultat = somme / notes.size();
+            if (LOGGER.isLoggable(java.util.logging.Level.INFO)) {
+                LOGGER.info("Moyenne : " + resultat);
+            }
         }
-
-        double somme = 0.0;
-        for (int note : notes) {
-            somme += note;
-        }
-
-        double moyenne = somme / notes.size();
-        // ✅ Logger à la place de System.out.println
-        LOGGER.info("Moyenne calculée : " + moyenne);
-        return moyenne;
+        return resultat;  // ✅ seul return
     }
 
     /**
@@ -69,11 +71,19 @@ public class GoodCode {
      * @param moyenne la moyenne de l'étudiant
      * @return le niveau sous forme de chaîne
      */
-    public String getNiveau(double moyenne) {
-        if (moyenne < SEUIL_ADMISSION)  return "Insuffisant";
-        if (moyenne < SEUIL_PASSABLE)   return "Passable";
-        if (moyenne < SEUIL_ASSEZ_BIEN) return "Assez Bien";
-        if (moyenne < SEUIL_BIEN)       return "Bien";
-        return "Très Bien";
+    public String getNiveau(final double moyenne) {
+        final String niveau;
+        if (moyenne < SEUIL_ADMISSION) {
+            niveau = "Insuffisant";
+        } else if (moyenne < SEUIL_PASSABLE) {
+            niveau = "Passable";
+        } else if (moyenne < SEUIL_ASSEZ_BIEN) {
+            niveau = "Assez Bien";
+        } else if (moyenne < SEUIL_BIEN) {
+            niveau = "Bien";
+        } else {
+            niveau = "Très Bien";
+        }
+        return niveau;  // ✅ seul return
     }
 }

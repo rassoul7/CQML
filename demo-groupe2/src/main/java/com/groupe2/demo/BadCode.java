@@ -1,74 +1,39 @@
 package com.groupe2.demo;
 
-import java.util.*;
+import java.util.List;
 
 /**
- * ⚠️ SCÉNARIO 1 — PIPELINE ROUGE
- *
- * Ce fichier contient des violations PMD INTENTIONNELLES.
- * Elles vont BLOQUER le pipeline dès le Job 1 (PMD).
- * SonarQube ne sera jamais atteint. Déploiement impossible.
- *
- * Violations incluses :
- *  - [PMD] EmptyCatchBlock       : catch vide → avale silencieusement les erreurs
- *  - [PMD] UnusedLocalVariable   : variable inutilisée = code mort
- *  - [PMD] SystemPrintln         : System.out.println en production = interdit
- *  - [PMD] AvoidDuplicateLiterals: même chaîne répétée 5 fois
- *  - [PMD] SimplifyBooleanReturns: return condition == true inutilement verbeux
+ * ❌ SCÉNARIO ROUGE — Violations des règles Groupe 2
+ * G2-004 : System.out.println
+ * G2-005 : Catch vide
+ * G2-006 : Plusieurs return dans une méthode
+ * G2-003 : Variable nommée "s" (trop court)
  */
 public class BadCode {
 
-    /**
-     * Calcule la moyenne d'une liste d'entiers.
-     * VIOLATION : catch vide + println + variable inutilisée
-     */
-    public double calculerMoyenne(List<Integer> notes) {
-        // ❌ VIOLATION PMD : UnusedLocalVariable
-        String statusInutile = "calcul en cours";
+    public BadCode() {
+        super();
+    }
 
-        double somme = 0;
+    // Déclenche G2-006 (plusieurs return) + G2-004 (System.out)
+    public boolean estAdmis(double moyenne) {
+        System.out.println("Vérification admissibilité...");  // G2-004
+        if (moyenne >= 10.0) {
+            return true;   // G2-006
+        }
+        return false;      // G2-006
+    }
+
+    // Déclenche G2-005 (catch vide) + G2-003 (variable "s")
+    public double calculerMoyenne(List<Integer> notes) {
+        double s = 0;  // G2-003 : "s" trop court
         try {
             for (int note : notes) {
-                somme += note;
+                s += note;
             }
         } catch (Exception e) {
-            // ❌ VIOLATION PMD : EmptyCatchBlock — l'erreur est avalée silencieusement !
+            // G2-005 : catch vide !
         }
-
-        double moyenne = somme / notes.size();
-
-        // ❌ VIOLATION PMD : SystemPrintln — interdit en prod
-        System.out.println("Moyenne calculée : " + moyenne);
-
-        return moyenne;
-    }
-
-    /**
-     * Vérifie si un étudiant est admis.
-     * VIOLATION : SimplifyBooleanReturns + AvoidDuplicateLiterals
-     */
-    public boolean estAdmis(double moyenne) {
-        // ❌ VIOLATION PMD : SimplifyBooleanReturns
-        // Correct serait : return moyenne >= 10.0;
-        if (moyenne >= 10.0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Retourne le niveau d'un étudiant.
-     * VIOLATION : AvoidDuplicateLiterals
-     */
-    public String getNiveau(double moyenne) {
-        // ❌ VIOLATION PMD : AvoidDuplicateLiterals — "Insuffisant" répété
-        if (moyenne < 5.0)  return "Insuffisant";
-        if (moyenne < 8.0)  return "Insuffisant";   // répété !
-        if (moyenne < 10.0) return "Insuffisant";   // répété !
-        if (moyenne < 12.0) return "Passable";
-        if (moyenne < 14.0) return "Assez Bien";
-        if (moyenne < 16.0) return "Bien";
-        return "Très Bien";
+        return s / notes.size();
     }
 }
