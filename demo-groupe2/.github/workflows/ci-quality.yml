@@ -31,7 +31,7 @@ jobs:
         #  Si des violations sont détectées → le build FAIL ici
         # Le job SonarQube ne sera JAMAIS lancé → déploiement BLOQUÉ
 
-      - name: "📋 Upload rapport PMD"
+      - name: " Upload rapport PMD"
         if: always()
         uses: actions/upload-artifact@v4
         with:
