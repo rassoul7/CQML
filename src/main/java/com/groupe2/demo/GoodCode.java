@@ -30,7 +30,7 @@ public class GoodCode {
     private static final double SEUIL_BIEN       = 16.0;
 
     /**
-     * Calcule la moyenne d'unee liste de notes.
+     * Calcule la moyenne d'une liste de notes.
      *
      * @param notes liste d'entiers représentant les notes
      * @return la moyenne ou 0.0 si la liste est vide
